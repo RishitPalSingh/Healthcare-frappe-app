@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Appointment Viewer</title>
+    <link rel="stylesheet" href="/assets/css/style1.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Appointment Details</h1>
+        <div id="appointment-details">
+           
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Extract appointment ID from URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const appointmentId = urlParams.get('appointment_id');
+            
+            if (!appointmentId) {
+                alert('Appointment ID not found.');
+                return;
+            }
+
+            // Fetch and display appointment details
+            fetch(`/api/method/healthcare.healthcare.healthcare_api.get_appointmentbyID?appointment_id=${appointmentId}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.message) {
+                        const appointment = data.message;
+                        document.getElementById('appointment-details').innerHTML = `
+                            <p><strong>Appointment ID:</strong> ${appointment.appointment_id}</p>
+                            <p><strong>Patient ID:</strong> ${appointment.patient_id}</p>
+                            <p><strong>Doctor ID:</strong> ${appointment.doctor_id}</p>
+                            <p><strong>Appointment Date:</strong> ${appointment.appointment_date}</p>
+                            <p><strong>Appointment Time:</strong> ${appointment.appointment_time}</p>
+                            <p><strong>Status:</strong> ${appointment.status}</p>
+                        `;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching appointment details:', error);
+                    alert('Failed to fetch appointment details.');
+                });
+        });
+    </script>
+</body>
+</html>

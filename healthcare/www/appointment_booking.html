@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Appointment Booking</title>
+    <link rel="stylesheet" href="/assets/css/style3.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Book an Appointment</h1>
+        <form id="appointment-form">
+            <label for="doctor">Select Doctor:</label>
+            <select id="doctor" name="doctor" required>
+                <!-- Options will be populated by JavaScript -->
+            </select>
+
+            <label for="appointment_date">Select Date:</label>
+            <input type="date" id="appointment_date" name="appointment_date" required>
+
+            <label for="appointment_time">Select Time:</label>
+            <input type="time" id="appointment_time" name="appointment_time" required>
+
+            <button type="submit">Book Appointment</button>
+        </form>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Fetch current logged-in user's email
+            fetch('/api/method/healthcare.healthcare.healthcare_api.get_current_user')
+                .then(response => response.json())
+                .then(data => {
+                    const email = data.message.email;
+                    console.log(email)
+                    if (!email) {
+                        alert('Failed to retrieve user email.');
+                        return;
+                    }
+
+                    // Fetch patient ID by email
+                    fetch(`/api/method/healthcare.healthcare.healthcare_api.get_patient_id_by_email?email=${email}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            const patientId = data.message;
+                            if (!patientId) {
+                                alert('Patient ID not found.');
+                                return;
+                            }
+
+                            // Fetch doctors list
+                            fetch('/api/method/healthcare.healthcare.healthcare_api.get_doctors')
+                                .then(response => response.json())
+                                .then(data => {
+                                    const doctors = data.message;
+                                    const doctorSelect = document.getElementById('doctor');
+                                    
+                                    doctors.forEach(function(doctor) {
+                                        const option = document.createElement('option');
+                                        option.value = doctor.doctor_id;
+                                        option.textContent = `${doctor.first_name} ${doctor.last_name}`;
+                                        doctorSelect.appendChild(option);
+                                    });
+                                });
+
+                            // Handle form submission
+                            document.getElementById('appointment-form').addEventListener('submit', function(e) {
+                                e.preventDefault();
+
+                                const doctorId = document.getElementById('doctor').value;
+                                const appointmentDate = document.getElementById('appointment_date').value;
+                                const appointmentTime = document.getElementById('appointment_time').value;
+                                console.log(patientId)
+                                console.log(doctorId)
+                                console.log(appointmentDate)
+                                console.log(appointmentTime)
+                                fetch(`/api/method/healthcare.healthcare.healthcare_api.create_appointment?patient_id=${patientId}&doctor_id=${doctorId}&appointment_date=${appointmentDate}&appointment_time=${appointmentTime}`)
+                                .then(response => response.json())
+                                .then(data => {
+                                    if (data.message) {
+                                        alert('Appointment booked successfully!',data.message);
+                                    } else {
+                                        alert('Failed to book appointment.');
+                                    }
+                                });
+                            });
+                        })
+                        .catch(error => {
+                            console.error('Error fetching patient ID:', error);
+                            alert('Failed to fetch patient ID.');
+                        });
+                })
+                .catch(error => {
+                    console.error('Error fetching current user email:', error);
+                    alert('Failed to fetch current user email.');
+                });
+        });
+    </script>
+</body>
+</html>

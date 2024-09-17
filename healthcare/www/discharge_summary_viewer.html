@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discharge Summary Viewer</title>
+    <link rel="stylesheet" href="/assets/css/style1.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Discharge Summary Details</h1>
+        <div id="discharge-summary-details">
+        
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Extract discharge ID from URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const dischargeId = urlParams.get('discharge_id');
+            
+            if (!dischargeId) {
+                alert('Discharge ID not found.');
+                return;
+            }
+
+            // Fetch and display discharge summary details
+            fetch(`/api/method/healthcare.healthcare.healthcare_api.get_discharge_summarybyid?discharge_id=${dischargeId}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.message) {
+                        const dischargeSummary = data.message;
+                        console.log(data.message)
+                        document.getElementById('discharge-summary-details').innerHTML = `
+                            <p><strong>Discharge ID:</strong> ${dischargeSummary.discharge_id}</p>
+                            <p><strong>Admission ID:</strong> ${dischargeSummary.admission_id}</p>
+                            <p><strong>Discharge Date:</strong> ${dischargeSummary.discharge_date}</p>
+                            <p><strong>Final Diagnosis:</strong> ${dischargeSummary.final_diagnosis}</p>
+                            <p><strong>Treatment Given:</strong> ${dischargeSummary.treatment_given}</p>
+                            <p><strong>Follow Up Instructions:</strong> ${dischargeSummary.follow_up_instructions}</p>
+                        `;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching discharge summary details:', error);
+                    alert('Failed to fetch discharge summary details.');
+                });
+        });
+    </script>
+</body>
+</html>

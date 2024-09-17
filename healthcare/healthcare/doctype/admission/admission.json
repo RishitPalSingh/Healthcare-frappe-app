@@ -1,0 +1,70 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "field:admission_id",
+ "creation": "2024-09-15 12:57:04.561346",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "admission_id",
+  "patient_id",
+  "admission_date",
+  "reason_for_admission",
+  "status"
+ ],
+ "fields": [
+  {
+   "fieldname": "admission_id",
+   "fieldtype": "Data",
+   "label": "Admission ID",
+   "unique": 1
+  },
+  {
+   "fieldname": "patient_id",
+   "fieldtype": "Link",
+   "label": "Patient ID",
+   "options": "Patient"
+  },
+  {
+   "fieldname": "admission_date",
+   "fieldtype": "Date",
+   "label": "Admission Date"
+  },
+  {
+   "fieldname": "reason_for_admission",
+   "fieldtype": "Text",
+   "label": "Reason for Admission"
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "label": "Status",
+   "options": "Admitted\nDischarged"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2024-09-17 13:26:15.795614",
+ "modified_by": "Administrator",
+ "module": "Healthcare",
+ "name": "Admission",
+ "naming_rule": "By fieldname",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

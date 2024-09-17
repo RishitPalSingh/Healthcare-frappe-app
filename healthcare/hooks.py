@@ -28,6 +28,7 @@ app_license = "mit"
 # app_include_css = "/assets/healthcare/css/healthcare.css"
 # app_include_js = "/assets/healthcare/js/healthcare.js"
 
+
 # include js, css files in header of web template
 # web_include_css = "/assets/healthcare/css/healthcare.css"
 # web_include_js = "/assets/healthcare/js/healthcare.js"
@@ -136,14 +137,33 @@ app_license = "mit"
 # Document Events
 # ---------------
 # Hook on document methods and events
-
+# API Routes
 # doc_events = {
-# 	"*": {
-# 		"on_update": "method",
-# 		"on_cancel": "method",
-# 		"on_trash": "method"
-# 	}
-# }
+#     "Patient": {
+#         "on_update": "healthcare.healthcare.healthcare_api.update_patient",
+   
+#     }
+# }get_appointmentbyID
+
+# Map API Endpoints
+override_whitelisted_methods = {
+    "api/method/healthcare.healthcare.healthcare_api.get_patient": "healthcare.healthcare.healthcare_api.get_patient",
+    "api/method/healthcare.healthcare.healthcare_api.update_patient": "healthcare.healthcare.healthcare_api.update_patient",
+    "api/method/healthcare.healthcare.healthcare_api.get_appointments": "healthcare.healthcare.healthcare_api.get_appointments",
+    "api/method/healthcare.healthcare.healthcare_api.create_appointment": "healthcare.healthcare.healthcare_api.create_appointment",
+    "api/method/healthcare.healthcare.healthcare_api.get_admission": "healthcare.healthcare.healthcare_api.get_admission",
+      "api/method/healthcare.healthcare.healthcare_api.get_admission_by_id": "healthcare.healthcare.healthcare_api.get_admission_by_id",
+    "api/method/healthcare.healthcare.healthcare_api.get_discharge_summary": "healthcare.healthcare.healthcare_api.get_discharge_summary",
+     "api/method/healthcare.healthcare.healthcare_api.get_discharge_summarybyid": "healthcare.healthcare.healthcare_api.get_discharge_summarybyid",
+    "api/method/healthcare.healthcare.healthcare_api.get_invoices": "healthcare.healthcare.healthcare_api.get_invoices",
+    "api/method/healthcare.healthcare.healthcare_api.get_invoice": "healthcare.healthcare.healthcare_api.get_invoice",
+    "api/method/healthcare.healthcare.healthcare_api.get_doctors": "healthcare.healthcare.healthcare_api.get_doctors",
+    "api/method/healthcare.healthcare.healthcare_api.get_patient_id_by_email": "healthcare.healthcare.healthcare_api.get_patient_id_by_email",
+     "api/method/healthcare.healthcare.healthcare_api.get_current_user": "healthcare.healthcare.healthcare_api.get_current_user",
+        "api/method/healthcare.healthcare.healthcare_api.get_appointmentbyID": "healthcare.healthcare.healthcare_api.get_appointmentbyID"
+}
+
+
 
 # Scheduled Tasks
 # ---------------

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoice Viewer</title>
+    <link rel="stylesheet" href="/assets/css/style1.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Invoice Details</h1>
+        <div id="invoice-details">
+        
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+           
+            const urlParams = new URLSearchParams(window.location.search);
+            const invoiceId = urlParams.get('invoice_id');
+            
+            if (!invoiceId) {
+                alert('Invoice ID not found.');
+                return;
+            }
+
+            // Fetch and display invoice details
+            fetch(`/api/method/healthcare.healthcare.healthcare_api.get_invoice?invoice_id=${invoiceId}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.message) {
+                        const invoice = data.message;
+                        document.getElementById('invoice-details').innerHTML = `
+                            <p><strong>Invoice ID:</strong> ${invoice.invoice_id}</p>
+                            <p><strong>Patient ID:</strong> ${invoice.patient_id}</p>
+                            <p><strong>Date:</strong> ${invoice.date}</p>
+                            <p><strong>Services Rendered:</strong> ${invoice.services_rendered}</p>
+                            <p><strong>Total Amount:</strong> ${invoice.total_amount}</p>
+                            <p><strong>Payment Status:</strong> ${invoice.payment_status}</p>
+                            <p><strong>Payment Method:</strong> ${invoice.payment_method}</p>
+                        `;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching invoice details:', error);
+                    alert('Failed to fetch invoice details.');
+                });
+        });
+    </script>
+</body>
+</html>

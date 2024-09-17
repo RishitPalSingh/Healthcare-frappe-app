@@ -1,0 +1,80 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "field:discharge_id",
+ "creation": "2024-09-15 13:13:51.405120",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "column_break_spnr",
+  "discharge_id",
+  "admission_id",
+  "discharge_date",
+  "final_diagnosis",
+  "treatment_given",
+  "follow_up_instructions"
+ ],
+ "fields": [
+  {
+   "fieldname": "column_break_spnr",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "discharge_id",
+   "fieldtype": "Data",
+   "label": "Discharge ID",
+   "unique": 1
+  },
+  {
+   "fieldname": "admission_id",
+   "fieldtype": "Link",
+   "label": "Admission ID",
+   "options": "Admission"
+  },
+  {
+   "fieldname": "discharge_date",
+   "fieldtype": "Date",
+   "label": "Discharge Date"
+  },
+  {
+   "fieldname": "final_diagnosis",
+   "fieldtype": "Text",
+   "label": "Final Diagnosis"
+  },
+  {
+   "fieldname": "treatment_given",
+   "fieldtype": "Text",
+   "label": "Treatment Given"
+  },
+  {
+   "fieldname": "follow_up_instructions",
+   "fieldtype": "Text",
+   "label": "Follow Up Instructions"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2024-09-17 17:57:33.729705",
+ "modified_by": "Administrator",
+ "module": "Healthcare",
+ "name": "Discharge Summary",
+ "naming_rule": "By fieldname",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

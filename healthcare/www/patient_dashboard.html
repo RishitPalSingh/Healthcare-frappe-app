@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Dashboard</title>
+    <link rel="stylesheet" href="/assets/css/style1.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Patient Dashboard</h1>
+        
+        <!-- Patient Details -->
+        <div id="patient-details">
+            <h2>Patient Information</h2>
+            <p><strong>Name:</strong> <span id="patient-name"></span></p>
+            <p><strong>Date of Birth:</strong> <span id="patient-dob"></span></p>
+            <p><strong>Gender:</strong> <span id="patient-gender"></span></p>
+            <p><strong>Contact Information:</strong> <span id="patient-contact"></span></p>
+
+            <button id="profile-management-btn" class="btn">Manage Profile</button>
+        </div>
+        
+        <!-- Appointments Section -->
+        <div id="appointment-section">
+            <h2>Upcoming Appointments</h2>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Doctor</th>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="appointments-list">
+                    <!-- Appointments will be dynamically loaded here -->
+                </tbody>
+            </table>
+
+            <button id="book-appointment-btn" class="btn">Book Appointment</button>
+        </div>
+
+        <!-- Invoices Section -->
+        <div id="invoice-section">
+            <h2>Recent Invoices</h2>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Services</th>
+                        <th>Total Amount</th>
+                        <th>Payment Status</th>
+                    </tr>
+                </thead>
+                <tbody id="invoices-list">
+                    <!-- Invoices will be dynamically loaded here -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Admission Details Section -->
+        <div id="admission-details-section">
+            <h2>Admission Details</h2>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Admission Date</th>
+                        <th>Reason for Admission</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="admission-details-list">
+                    <!-- Admission details will be dynamically loaded here -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Discharge Summary Section -->
+        <div id="discharge-summary-section">
+            <h2>Discharge Summary</h2>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Discharge Date</th>
+                        <th>Final Diagnosis</th>
+                        <th>Treatment Given</th>
+                        <th>Follow-up Instructions</th>
+                    </tr>
+                </thead>
+                <tbody id="discharge-summary-list">
+                   
+                </tbody>
+            </table>
+        </div>
+
+       
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        document.getElementById('profile-management-btn').addEventListener('click', function() {
+            window.location.href = '/profile_management'; // Update this path as necessary
+        });
+        document.getElementById('book-appointment-btn').addEventListener('click', function() {
+            window.location.href = '/appointment_booking'; // Update this path as necessary
+        });
+
+        // Handle row clicks to navigate to appointment viewer
+        document.getElementById('appointments-list').addEventListener('click', function(event) {
+            const targetRow = event.target.closest('tr');
+            if (targetRow) {
+                const appointmentId = targetRow.getAttribute('data-appointment-id');
+                if (appointmentId) {
+                    window.location.href = `/appointment_viewer?appointment_id=${appointmentId}`;
+                }
+            }
+        });
+        // Handle row clicks to navigate to invoice viewer
+       document.getElementById('invoices-list').addEventListener('click', function(event) {
+       const targetRoww = event.target.closest('tr');
+        if (targetRoww) {
+        const invoiceId = targetRoww.getAttribute('data-invoice-id');
+        if (invoiceId) {
+            window.location.href = `/invoice_viewer?invoice_id=${invoiceId}`;
+        }
+    }
+});
+// Handle row clicks to navigate to admission viewer
+document.getElementById('admission-details-list').addEventListener('click', function(event) {
+    const targetRow = event.target.closest('tr');
+    if (targetRow) {
+        const admissionId = targetRow.getAttribute('data-admission-id');
+        if (admissionId) {
+            window.location.href = `/admission_viewer?admission_id=${admissionId}`;
+        }
+    }
+});
+// Handle row clicks to navigate to discharge summary viewer
+document.getElementById('discharge-summary-list').addEventListener('click', function(event) {
+    const targetRow = event.target.closest('tr');
+    if (targetRow) {
+        const dischargeId = targetRow.getAttribute('data-discharge-id');
+        if (dischargeId) {
+            window.location.href = `/discharge_summary_viewer?discharge_id=${dischargeId}`;
+        }
+    }
+});
+
+
+
+
+        // Fetch current logged-in user's email
+        fetch('/api/method/healthcare.healthcare.healthcare_api.get_current_user')
+            .then(response => response.json())
+            .then(data => {
+                const email = data.message.email;
+                if (!email) {
+                    alert('Failed to retrieve user email.');
+                    return;
+                }
+
+                // Fetch patient ID by email
+                fetch(`/api/method/healthcare.healthcare.healthcare_api.get_patient_id_by_email?email=${email}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        const patientId = data.message;
+                        if (!patientId) {
+                            alert('Patient ID not found.');
+                            return;
+                        }
+
+                        // Fetch and display patient details
+                        fetch(`/api/method/healthcare.healthcare.healthcare_api.get_patient?patient_id=${patientId}`)
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.message) {
+                                    const patient = data.message;
+                                    document.getElementById('patient-name').innerText = patient.first_name + ' ' + patient.last_name;
+                                    document.getElementById('patient-dob').innerText = patient.date_of_birth;
+                                    document.getElementById('patient-gender').innerText = patient.gender;
+                                    document.getElementById('patient-contact').innerText = patient.contact_information;
+                                }
+                            });
+
+                        // Fetch and display appointments
+                        fetch(`/api/method/healthcare.healthcare.healthcare_api.get_appointments?patient_id=${patientId}`)
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.message) {
+                                    let appointmentHTML = '';
+                                    data.message.forEach(function (appointment) {
+                                        appointmentHTML += `
+                                            <tr data-appointment-id="${appointment.appointment_id}">
+                                                <td>${appointment.doctor_id}</td>
+                                                <td>${appointment.appointment_date}</td>
+                                                <td>${appointment.appointment_time}</td>
+                                                <td>${appointment.status}</td>
+                                            </tr>
+                                        `;
+                                    });
+                                    document.getElementById('appointments-list').innerHTML = appointmentHTML;
+                                }
+                            });
+
+                        // Fetch and display invoices
+                        fetch(`/api/method/healthcare.healthcare.healthcare_api.get_invoices?patient_id=${patientId}`)
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.message) {
+                                    let invoiceHTML = '';
+                                    data.message.forEach(function (invoice) {
+                                        invoiceHTML += `
+                                            <tr data-invoice-id="${invoice.invoice_id}">
+                                                <td>${invoice.date}</td>
+                                                <td>${invoice.services_rendered}</td>
+                                                <td>${invoice.total_amount}</td>
+                                                <td>${invoice.payment_status}</td>
+                                            </tr>
+                                        `;
+                                    });
+                                    document.getElementById('invoices-list').innerHTML = invoiceHTML;
+                                }
+                            });
+
+                        // Fetch and display admission details
+                        fetch(`/api/method/healthcare.healthcare.healthcare_api.get_admission?patient_id=${patientId}`)
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.message) {
+                                    let admissionId = data.message[0].admission_id;
+                                    let admissionHTML = '';
+                                    data.message.forEach(function (admission) {
+                                        admissionHTML += `
+                                           <tr data-admission-id="${admission.admission_id}">
+                                                <td>${admission.admission_date}</td>
+                                                <td>${admission.reason_for_admission}</td>
+                                                <td>${admission.status}</td>
+                                            </tr>
+                                        `;
+                                    });
+                                    document.getElementById('admission-details-list').innerHTML = admissionHTML;
+                                }
+                            });
+
+                        // Fetch and display discharge summary
+                        fetch(`/api/method/healthcare.healthcare.healthcare_api.get_admission?patient_id=${patientId}`)
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.message) {
+                                    let admissionId = data.message[0].admission_id;
+                                    fetch(`/api/method/healthcare.healthcare.healthcare_api.get_discharge_summary?admission_id=${admissionId}`)
+                                        .then(response => response.json())
+                                        .then(data => {
+                                            if (data.message) {
+                                                let dischargeHTML = '';
+                                                const discharge = data.message;
+                                                dischargeHTML += `
+                                                    <tr data-discharge-id="${discharge.discharge_id}">
+                                                        <td>${discharge.discharge_date}</td>
+                                                        <td>${discharge.final_diagnosis}</td>
+                                                        <td>${discharge.treatment_given}</td>
+                                                        <td>${discharge.follow_up_instructions}</td>
+                                                    </tr>
+                                                `;
+                                                document.getElementById('discharge-summary-list').innerHTML = dischargeHTML;
+                                            }
+                                        });
+                                }
+                            });
+
+                    })
+                    .catch(error => {
+                        console.error('Error fetching patient ID:', error);
+                        alert('Failed to fetch patient ID.');
+                    });
+            })
+            .catch(error => {
+                console.error('Error fetching current user email:', error);
+                alert('Failed to fetch current user email.');
+            });
+    });
+</script>
+
+</body>
+</html>
