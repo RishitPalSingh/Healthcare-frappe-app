@@ -16,7 +16,6 @@ def get_patient_id_by_email(email):
     """
     Retrieve the patient ID using the email address.
     """
-    print(email)
     try:
    
         patient = frappe.get_all('Patient', filters={'contact_information': email}, fields=['patient_id'])
@@ -30,7 +29,7 @@ def get_patient_id_by_email(email):
 
 @frappe.whitelist(allow_guest=True)
 def get_doctors():
-    print("i was called")
+
     """
     Retrieve a list of all doctors.
     """
@@ -82,14 +81,14 @@ def update_patient(patient_id, first_name=None, last_name=None, contact_informat
 
 @frappe.whitelist(allow_guest=True)
 def get_current_user():
-    print("jinja working")
+    
     user = frappe.get_doc('User', frappe.session.user)
     return {'email': user.email}
 
 
 @frappe.whitelist(allow_guest=True)
 def get_discharge_summarybyid(discharge_id):
-    print(discharge_id)
+    
     
     try:
        
@@ -174,7 +173,6 @@ def create_appointment(patient_id, doctor_id, appointment_date, appointment_time
     """Create a new appointment"""
     try:
        
-
         appointment = frappe.get_doc({
             "doctype": "Appointment",
           "appointment_id":patient_id+doctor_id,
@@ -192,8 +190,6 @@ def create_appointment(patient_id, doctor_id, appointment_date, appointment_time
 
     except Exception as e:
         return {"error": str(e)}
-
-
 
 @frappe.whitelist(allow_guest=True)
 def get_appointmentbyID(appointment_id):
@@ -216,11 +212,6 @@ def get_appointmentbyID(appointment_id):
         # Handle any other exceptions
         return {"error": "An error occurred while fetching appointment details"}
 
-
-
-# -----------------------------------
-# Admission and Discharge API Endpoints
-# -----------------------------------
 @frappe.whitelist(allow_guest=True)
 def get_admission(patient_id):
     """Retrieve the current admission details for a patient"""
