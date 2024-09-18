@@ -11,7 +11,8 @@
   "doctor_id",
   "appointment_date",
   "appointment_time",
-  "status"
+  "status",
+  "workflow_state"
  ],
  "fields": [
   {
@@ -46,11 +47,15 @@
    "fieldtype": "Select",
    "label": "Status",
    "options": "Scheduled\nCompleted\nCancelled"
+  },
+  {
+   "fieldname": "workflow_state",
+   "fieldtype": "Data"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-09-17 09:48:56.295062",
+ "modified": "2024-09-18 11:02:47.615692",
  "modified_by": "Administrator",
  "module": "Healthcare",
  "name": "Appointment",
